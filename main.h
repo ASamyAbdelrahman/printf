@@ -3,10 +3,21 @@
 
 #include <stdarg.h>
 #include <stdlib.h>
+/*format_struct.c -> Abdullrahmen*/
+struct Format_str
+{
+	char specifier;
+	char length;
+	int precision;
+	int width;
+	char *flags;
+	void *variable;
+}
+struct Format_str *str2format(char const * str);
+void free_Format_str(struct Format_str *ptr);
 
 /*_putchar.c -> Samy*/
-int _putbuffer(char *str); /*1024 bytes*/
-void print_string(char *str);
+int _putbuffer(char *str, unsigned int size);
 unsigned int str_len(char *str);
 char *capitalize(char *str);
 char *reverse(char *str);
@@ -18,6 +29,7 @@ int _printf(const char *format, ...);
 /*int2str.c -> Samy */
 char *int2str(char length, void const * const ptr); /* length {'\0' , 'l', 'h'} */
 char *uint2str(const unsigned int n);
+int str2int(char *str);
 
 /*handle_percentage.c -> Abdullrahmen*/
 char *handle_percentage(char *str, void const * const ptr);
