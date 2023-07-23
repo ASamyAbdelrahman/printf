@@ -26,7 +26,7 @@ char *handle_precision(char *str);
 char *handle_width(char *str);
 char *handle_flag(char *str);
 
-/*numerical_conversions.c -> Samy*/
+/*numerical_conversions.c -> Samy -> all strings are in the heap (don't forget to free)*/
 char *uint2bin(char length, void const * const ptr); /* length {'ul' (unsigned long), 'u' (unsigned int)} */
 char *int2octal(char length, void const * const ptr); /* length {'\0' , 'l', 'h'} */
 char *int2hex(char length, void const * const ptr); /* length {'\0' , 'l', 'h'} */
