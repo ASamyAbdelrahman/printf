@@ -8,13 +8,18 @@ struct Format_str
 {
 	char specifier;
 	char length;
-	int precision;
-	int width;
+	unsigned int precision;
+	unsigned int width;
 	char *flags;
 	void *variable;
-}
-struct Format_str *str2format(char const * str);
-void free_Format_str(struct Format_str *ptr);
+};
+struct Format_str *str2format(char const *str)
+unsigned int handles(struct Format_str *format,
+				char const *str, unsigned int i,
+				unsigned int j);
+char *sub_string(char *str, unsigned int n);
+char *_strncpy(char *dest, char *src, int n);
+int is_in_str(char value, char *str);
 
 /*_putchar.c -> Samy*/
 int _putbuffer(char *str, unsigned int size);
