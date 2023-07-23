@@ -16,7 +16,7 @@ char *ptr2str(void *ptr);
 int _printf(const char *format, ...);
 
 /*int2str.c -> Samy */
-char *int2str(char length, void *ptr); /* length {'\0' , 'l', 'h'} */
+char *int2str(char length, void const * const ptr); /* length {'\0' , 'l', 'h'} */
 char *uint2str(const unsigned int n);
 
 /*handle_percentage.c -> Abdullrahmen*/
@@ -27,7 +27,7 @@ char *handle_width(char *str);
 char *handle_flag(char *str);
 
 /*numerical_conversions.c -> Samy -> all strings are in the heap (don't forget to free)*/
-char *uint2bin(char length, void const * const ptr); /* length {'ul' (unsigned long), 'u' (unsigned int)} */
+char *uint2bin(unsigned int n);
 char *int2octal(char length, void const * const ptr); /* length {'\0' , 'l', 'h'} */
 char *int2hex(char length, void const * const ptr); /* length {'\0' , 'l', 'h'} */
 char *custom_specifier_S(char *str);
