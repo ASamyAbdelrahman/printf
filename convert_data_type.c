@@ -4,6 +4,7 @@
  * convert2signed - converts the data type of a number
  * @num: the required number
  * @length: the required data type
+ * Return: casted value of num
  */
 
 long int convert2signed(long int num, char length)
@@ -20,6 +21,7 @@ long int convert2signed(long int num, char length)
  * convert2unsigned - converts the data type of a number
  * @num: the required number
  * @length: the required data type
+ * Return: casted value of num
  */
 unsigned long int convert2unsigned(unsigned long int num, char length)
 {
