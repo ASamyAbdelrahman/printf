@@ -31,8 +31,10 @@ char *_strncpy(char *dest, char const *src, int n)
 	int i = 0;
 
 	while (src[i] != '\0' && i < n)
-		dest[i++] = src[i];
-
+	{
+		dest[i] = src[i];
+		++i;
+	}
 	while (i < n)
 		dest[i++] = '\0';
 
@@ -49,11 +51,12 @@ char *_strncpy(char *dest, char const *src, int n)
 char *sub_string(char const *str, unsigned int n)
 {
 	char *sub;
-	int i = 0;
 
 	if (!str)
 		return (0);
 	sub = malloc(n + 1);
+	if (!sub)
+		return (0);
 	sub = _strncpy(sub, str, n);
 	sub[n] = '\0';
 	return (sub);

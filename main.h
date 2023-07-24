@@ -22,7 +22,6 @@ char *_strncpy(char *dest, char const *src, int n);
 int is_in_str(char value, char *str);
 
 /*_putchar.c -> Samy*/
-int _putbuffer(char *str, unsigned int size);
 unsigned int str_len(char *str);
 char *capitalize(char *str);
 char *reverse(char *str);
@@ -36,9 +35,9 @@ char *int2str(char length, void const * const ptr); /* length {'\0' , 'l', 'h'} 
 char *uint2str(const unsigned int n);
 int str2int(char *str);
 
-/*handle_percentage.c -> Abdullrahmen*/
-char *handle_percentage(char *str, void const * const ptr);
-char *handle_variable(char *str, void const * const ptr);
+/*format_struct2string.c -> Abdullrahmen*/
+char *format2str(struct Format_str *f_str);
+char *handle_variable(struct Format_str *f_str);
 char *handle_precision(char *str);
 char *handle_width(char *str);
 char *handle_flag(char *str);
