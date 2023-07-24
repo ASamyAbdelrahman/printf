@@ -33,7 +33,7 @@ int _printf(const char *format, ...);
 
 /*int2str.c -> Samy */
 char *int2str(char length, void const * const ptr); /* length {'\0' , 'l', 'h'} */
-char *uint2str(const unsigned int n);
+char *uint2str(unsigned int n);
 int str2int(char *str);
 
 /*handle_percentage.c -> Abdullrahmen*/
