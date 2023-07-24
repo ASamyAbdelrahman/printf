@@ -15,7 +15,7 @@ int str2int(char *str)
 	for (i = 0; i < len; i++)
 	{
 		if (str[len - (i + 1)] >= '0' && str[len - (i + 1)] <= '9')
-		num = num + ((str[len - (i + 1)] - '0') * (10 ^ i));
+		num = num * 10 + str[i] - '0';
 	}
 	return (num);
 }
