@@ -7,7 +7,7 @@
  */
 char *reverse(char *str)
 {
-	char rev = s[0];
+	char rev = str[0];
 	int counter = 0;
 	int i;
 

@@ -1,26 +1,35 @@
 #include "main.h"
+#include <stdlib.h>
 
 /**
  * uint2str - converts unsigned int to string
  * @num: the required number
  * Return: on success a string (str)
  */
-char *uint2str(const unsigned int num)
+char *uint2str(unsigned int num)
 {
 	char *str;
-	unsigned int len, i, n, rem;
+	unsigned int n, rem;
+	int len, i;
 
 	n = num;
+	len = 0;
 	while (n != 0)
 	{
 		len++;
 		n /= 10;
 	}
-	for (i = 0; i < len; i++)
+	str = (char *)malloc(sizeof(char) * (len + 1));
+	if (str == NULL)
+		return (NULL);
+	if (str != NULL)
 	{
-		rem = num % 10;
-		num = num / 10;
-		str[len - (i + 1)] = rem + '0';
+		for (i = 0; i < len; i++)
+		{
+			rem = num % 10;
+			num = num / 10;
+			str[len - (i + 1)] = rem + '0';
+		}
 	}
 	str[len] = '\0';
 	return (str);
