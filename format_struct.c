@@ -1,4 +1,6 @@
 #include "main.h"
+#include <stdio.h>
+#include <unistd.h>
 
 /**
 * is_in_str - Check if the value is in a string
@@ -11,7 +13,7 @@ int is_in_str(char value, char *str)
 	int i = 0;
 
 	while (str[i])
-		if (str[i] == value)
+		if (str[i++] == value)
 			return (1);
 	return (0);
 }
@@ -24,12 +26,12 @@ int is_in_str(char value, char *str)
  *
  * Return: pointer to the resulting string
  */
-char *_strncpy(char *dest, char *src, int n)
+char *_strncpy(char *dest, char const *src, int n)
 {
 	int i = 0;
 
 	while (src[i] != '\0' && i < n)
-		dest[i] = src[i++];
+		dest[i++] = src[i];
 
 	while (i < n)
 		dest[i++] = '\0';
@@ -44,7 +46,7 @@ char *_strncpy(char *dest, char *src, int n)
 * @n : number of bytes to take from the str (without the null char)
 * Return: the sub string
 */
-char *sub_string(char *str, unsigned int n)
+char *sub_string(char const *str, unsigned int n)
 {
 	char *sub;
 	int i = 0;
@@ -79,12 +81,12 @@ unsigned int handles(struct Format_str *format,
 		format->width = 0;
 	else
 	{
-		sub_str = sub_string(str[j], i - j);
-		format->width = str2int(sub_str);
+		sub_str = sub_string(&str[j], i - j);
+		format->width = atoi(sub_str);
 		free(sub_str);
 	}
 
-	j = i
+	j = i;
 	if (str[i++] == '.')
 		while (str[i] >= '0' && str[i] <= '9')
 			++i;
@@ -94,11 +96,11 @@ unsigned int handles(struct Format_str *format,
 		format->precision = 0;
 	else
 	{
-		sub_str = sub_string(str[j], i - j);
-		format->precision = str2int(sub_str);
+		sub_str = sub_string(&str[j + 1], i - 1 - j);
+		format->precision = atoi(sub_str);
 		free(sub_str);
 	}
-	return (format);
+	return (i);
 }
 
 /**
@@ -118,13 +120,17 @@ struct Format_str *str2format(char const *str)
 		return (0);
 
 	format = malloc(sizeof(struct Format_str));
-/* flags */
+	if (!format)
+		return (0);
+
+/* flags */ 
 	while (is_in_str(str[i], flags))
 		++i;
 	if (i == j)
 		format->flags = 0;
 	else
-		format->flags = sub_string(str[j], i - j);
+		format->flags = sub_string(&str[j], i - j);
+
 
 /* width and precision */
 	i = handles(format, str, i, j);
