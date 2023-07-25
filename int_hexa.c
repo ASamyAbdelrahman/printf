@@ -34,7 +34,7 @@ char *int2hex(char length, void const * const ptr)
 		if (temp < 10)
 			temp = temp + 48;
 		else
-			temp = temp + 55;
+			temp = temp + 87;
 		hexa[i++] = temp;
 		n = n / 16;
 	}
