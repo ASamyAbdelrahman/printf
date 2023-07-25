@@ -3,6 +3,7 @@
 
 #include <stdarg.h>
 #include <stdlib.h>
+
 /*format_struct.c -> Abdullrahmen*/
 struct Format_str
 {
@@ -11,6 +12,7 @@ struct Format_str
 	unsigned int precision;
 	unsigned int width;
 	char *flags;
+	char *str; /*final string*/
 	void *variable;
 };
 struct Format_str *str2format(char const *str);
@@ -32,15 +34,16 @@ int _printf(const char *format, ...);
 
 /*int2str.c -> Samy */
 char *int2str(char length, void const * const ptr); /* length {'\0' , 'l', 'h'} */
-char *uint2str(unsigned int n);
+/*char *uint2str(char length, void const * const ptr);*/
+char *uint2str(unsigned int num);
 int str2int(char *str);
 
-/*format_struct2string.c -> Abdullrahmen*/
-char *format2str(struct Format_str *f_str);
-char *handle_variable(struct Format_str *f_str);
-char *handle_precision(char *str);
-char *handle_width(char *str);
-char *handle_flag(char *str);
+/*format2final_str.c -> Abdullrahmen*/
+char *get_final_str(struct Format_str *format);
+char *handle_variable(struct Format_str *format);
+char *handle_precision(struct Format_str *format);
+char *handle_width(struct Format_str *format);
+char *handle_flags(struct Format_str *format);
 
 /*numerical_conversions.c -> Samy -> all strings are in the heap (don't forget to free)*/
 char *uint2bin(unsigned int n);

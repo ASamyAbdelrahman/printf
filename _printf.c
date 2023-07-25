@@ -36,6 +36,14 @@ char get_type(struct Format_str *f_str)
 {
 	switch (f_str->specifier)
 	{
+	case 'b':
+		return (4);
+	case 'S':
+		return (8);
+	case 'r':
+		return (8);
+	case 'R':
+		return (8);
 	case 'c':
 		return (9);
 	case 's':
@@ -140,39 +148,21 @@ void *get_variable(va_list *args, struct Format_str *f_str)
 	return (0);
 }
 
-void free_Format(struct Format_str *f_str)
+void free_Format(struct Format_str *format)
 {
-	free(f_str->flags);
-	switch(get_type(f_str))
+	free(format->flags);
+	switch(get_type(format))
 	{
 	case 0:
 		break;
 	case 7:
 	case 8:
 		break;
-	case 1:
-		free((int*)f_str->variable);
-		break;
-	case 2:
-		free((short*)f_str->variable);
-		break;
-	case 3:
-		free((long*)f_str->variable);	
-		break;
-	case 4:
-		free((unsigned int*)f_str->variable);	
-		break;
-	case 5:
-		free((unsigned short*)f_str->variable);
-		break;
-	case 6:
-		free((unsigned long*)f_str->variable);
-		break;
-	case 9:
-		free((char*)f_str->variable);
-		break;
+	default:
+		free(format->variable);
 	}
-	free(f_str);
+	free(format->str);
+	free(format);
 }
 
 /**
@@ -185,7 +175,7 @@ int _printf(const char *format, ...)
 	int n_chars_printed = 0;
 	va_list args;
 	int i = 0;
-	char *buffer;
+	char *buffer, *str;
 	struct Format_str *f_str;
 
 
@@ -205,8 +195,10 @@ int _printf(const char *format, ...)
 				continue;
 			}
 			f_str = str2format(&format[i]);
+
 			debug_print_Format(f_str);
-			printf("%i\n\n", get_type(f_str));
+			printf("type : %i\n", get_type(f_str));
+
 			f_str->variable = get_variable(&args, f_str);
 			if (!f_str->variable)
 			{
@@ -214,7 +206,9 @@ int _printf(const char *format, ...)
 				++i;
 				continue;
 			}
-			printf("\n\n%d\n\n", *((int*)f_str->variable));
+			f_str->str = get_final_str(f_str);
+			printf("\n'%s'\n", f_str->str);
+			/*buffer = handle_buffer(buffer, str, str_len(str), &n_chars_printed);*/ 
 			free_Format(f_str);
 		}
 		/*printf("%c", format[i]);*/
@@ -233,11 +227,15 @@ int _printf(const char *format, ...)
 */
 int main(void)
 {
-	int i = 5;
+	int i = 555;
+	char str[] = "Hello world";
+
 	/*printf("%hu", (unsigned long) i);*/
-	_printf("%d\n\n", i);
-	/*_printf("Hello there >%+-+  23.55lX<", i);*/
-	/*_printf("% kd125");*/
+	_printf("%10.17o", i);
+	printf("'%10.17o'", i);
+	/*_printf("%b", i);
+	_printf("Hello there >%+-+  23.55lX<", i);
+	_printf("% kd125");*/
 	return (0);
 }
 

@@ -75,7 +75,15 @@ unsigned int handles(struct Format_str *format,
 				char const *str, unsigned int i,
 				unsigned int j)
 {
+	char flags[] = " #0-+";
 	char *sub_str;
+
+	while (is_in_str(str[i], flags))
+		++i;
+	if (i == j)
+		format->flags = 0;
+	else
+		format->flags = sub_string(&str[j], i - j);
 
 	j = i;
 	while (str[i] >= '0' && str[i] <= '9')
@@ -115,9 +123,9 @@ struct Format_str *str2format(char const *str)
 {
 	unsigned int i = 0, j = 1;
 	struct Format_str *format = 0;
-	char specifier[] = "iduoxX";
+	char specifier[] = "csiduoxXp";
 	char length[] = "lh";
-	char flags[] = " #0-+";
+	char custom_spec[] = "rRSb";
 
 	if (str[i++] != '%')
 		return (0);
@@ -125,17 +133,7 @@ struct Format_str *str2format(char const *str)
 	format = malloc(sizeof(struct Format_str));
 	if (!format)
 		return (0);
-
-/* flags */ 
-	while (is_in_str(str[i], flags))
-		++i;
-	if (i == j)
-		format->flags = 0;
-	else
-		format->flags = sub_string(&str[j], i - j);
-
-
-/* width and precision */
+/* flags, width and precision */
 	i = handles(format, str, i, j);
 
 /* length */
@@ -149,9 +147,17 @@ struct Format_str *str2format(char const *str)
 /* specifier */
 	if (is_in_str(str[i], specifier))
 		format->specifier = str[i];
+	else if (is_in_str(str[i], custom_spec))
+	{
+		format->specifier = str[i];
+		format->length = 0;
+		format->precision = 0;
+		format->width = 0;
+		format->flags = 0;
+	}
 	else
 		format->specifier = 0;
-
+	format->str = 0;
 	return (format);
 }
 
