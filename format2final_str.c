@@ -1,7 +1,4 @@
-#include <unistd.h>
 #include "main.h"
-#include "string.h"
-#include <stdio.h>
 
 char *get_final_str(struct Format_str *format)
 {
@@ -72,7 +69,7 @@ char *handle_variable(struct Format_str *format)
 		format->str = int2octal(format->length, format->variable);
 		if (is_in_str('#', format->flags))
 		{
-			len = strlen(format->str);
+			len = str_len(format->str);
 			str = malloc(len + 2);
 			if (!str)
 				return (0);
@@ -105,10 +102,20 @@ char *handle_variable(struct Format_str *format)
 		break;
 	case 'p':
 		format->str = ptr2str(format->variable);
+		len = str_len(format->str);
+		str = malloc(len + 3);
+		str[0] = '0';
+		str[1] = 'x';
+		str[len] = '\0';
+		_strncpy(&str[2], format->str, len);
+		free(format->str);
+		format->str = str;
 		break;
 	case 'R':
 		format->str = rot13(format->variable);
 		break;
+	case 'c':
+		format->str = sub_string(format->variable, str_len(format->variable));
 	}
 	return (format->str);
 }
@@ -120,7 +127,7 @@ char *handle_precision(struct Format_str *format)
 
 	if (!format->precision || !format->is_number)
 		return (format->str);
-	len = strlen(format->str);
+	len = str_len(format->str);
 	if (format->precision <= len)
 		return (format->str);
 
