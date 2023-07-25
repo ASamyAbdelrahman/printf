@@ -46,7 +46,8 @@ char __printf__(const char *format, int *n_printed, int *i, va_list *args,
 		char *buffer, struct Format_str *f_str);
 
 /*int2str.c -> Samy */
-char *int2str(char length, void const * const ptr, char put_positive_sign); /* length {'\0' , 'l', 'h'} */
+char *int2str(char length, void const * const ptr, char put_positive_sign);
+/* length {'\0' , 'l', 'h'} */
 char *uint2str(char length, void const * const ptr, char put_positive_sign);
 int str2int(char *str);
 
@@ -55,16 +56,20 @@ char *get_final_str(struct Format_str *format);
 char *handle_variable2(struct Format_str *format, char *str, unsigned int len);
 char *handle_variable(struct Format_str *format);
 char *handle_precision(struct Format_str *format);
-char *handle_buffer(char *buffer, char const *str, unsigned int str_len_, int *n_char_printed);
+char *handle_buffer(char *buffer, char const *str, unsigned int str_len_,
+int *n_char_printed);
 
 /*handle_width.c -> Abdullrahmen*/
 char *handle_width(struct Format_str *format);
-char *handle_width2(struct Format_str *format, char *str, unsigned int i, unsigned int len);
+char *handle_width2(struct Format_str *format, char *str, unsigned int i,
+		unsigned int len);
 
-/*numerical_conversions.c -> Samy -> all strings are in the heap (don't forget to free)*/
+/*numerical_conversions.c -> Samy -> strings are in the heap*/
 char *uint2bin(unsigned int n);
-char *int2octal(char length, void const * const ptr); /* length {'\0' , 'l', 'h'} */
-char *int2hex(char length, void const * const ptr); /* length {'\0' , 'l', 'h'} */
+char *int2octal(char length, void const * const ptr);
+/* length {'\0' , 'l', 'h'} */
+char *int2hex(char length, void const * const ptr);
+/* length {'\0' , 'l', 'h'} */
 char *custom_specifier_S(char *str);
 char *rot13(char *str);
 
