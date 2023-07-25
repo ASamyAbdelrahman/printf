@@ -178,19 +178,18 @@ void *get_variable(va_list *args, struct Format_str *f_str)
 
 void free_Format(struct Format_str *format)
 {
+	free(format);
 	free(format->flags);
 	switch(get_type(format))
 	{
 	case 0:
-		break;
 	case 7:
 	case 8:
 		break;
-	default:
-		free(format->variable);
+/*	default:
+		free(format->variable);*/
 	}
 	free(format->str);
-	free(format);
 }
 
 /**
@@ -202,14 +201,14 @@ void free_Format(struct Format_str *format)
 * @n_char_printed : will increased by the number of characters printed
 * Return: The new buffer
 */
-char *handle_buffer(char *buffer, char const *str, unsigned int str_len, int *n_char_printed)
+char *handle_buffer(char *buffer, char const *str, unsigned int str_len_, int *n_char_printed)
 {
 	unsigned int len = 0, i = 0;
 
-	len = strlen(buffer);
-	while (i < str_len)
+	len = str_len(buffer);
+	while (i < str_len_)
 	{
-		while (i < str_len && len < 1024)
+		while (i < str_len_ && len < MAX_BUFFER_SIZE)
 		{
 			buffer[len] = str[i];
 			++i;
@@ -243,11 +242,14 @@ int _printf(const char *format, ...)
 	char *buffer, *str;
 	struct Format_str *f_str;
 
+	if(!format)
+		write(1, "NULL", 4);
 
 	va_start(args, format);
 	buffer = malloc(MAX_BUFFER_SIZE);
 	if (!buffer)
 		return (-1);
+	buffer[0] = '\0';
 	while(format[i])
 	{
 		if (format[i] == '%')
@@ -298,19 +300,23 @@ int main(void)
 	int i = 555;
 	char str[] = "Hello";
 
-	_printf("123456789123456789\n");
-	printf("123456789123456789\n");
+/*	_printf("123456789123456789\n");
+	printf("123456789123456789\n");*/
 
-/*	printf("$$%s$$", int2octal(0, &i));*/
-/*	printf("%hu", (unsigned long) i);*/
+	_printf("->'%R'<-\n", str);
+
+
 	_printf("'%28s'\n", str);
 	printf("'%28s'\n", str);
 
-	_printf("'%-#15.9lX'\n", i);
-	printf("'%-#15.9lX'\n", i);
+	_printf("'%#- 2.10s'\n", str);
+	printf("'%#- 2.10s'\n", str);
 
-	_printf("'% +#5.10hX'\n", i);
-	printf("'% #5.10hX'\n", i);
+	_printf("'%-#15.9lx'\n", i);
+	printf("'%-#15.9lx'\n", i);
+
+	_printf("'% #5.10hx'\n", i);
+	printf("'% #5.10hx'\n", i);
 
 	_printf("'%+- #015.5X'\n", i);
 	printf("'%+- #015.5X'\n", i);
@@ -321,9 +327,10 @@ int main(void)
 	_printf("'%#X'\n", 0);
 	printf("'%#X'\n", 0);
 
-	/*_printf("%b", i);
-	_printf("Hello there >%+-+  23.55lX<", i);
-	_printf("% kd125");*/
+	_printf("'%b'\n", i);
+	printf("'%b'\n", i);
+	/*_printf("Hello there >%+-+  23.55lX<", i);*/
+	/*_printf("% kd125");*/
 	return (0);
 }
 
