@@ -57,17 +57,17 @@ char *handle_variable(struct Format_str *format)
 	switch (format->specifier)
 	{
 	case 'd':
-	case 'i':/*
+	case 'i':
 		if (is_in_str('+', format->flags))
 			format->str = int2str(format->length, format->variable, 1);
 		else
-			format->str = int2str(format->length, format->variable, 0);*/
+			format->str = int2str(format->length, format->variable, 0);
 		break;
-	case 'u':/*
+	case 'u':
 		if (is_in_str('+', format->flags))
 			format->str = uint2str(format->length, format->variable, 1);
 		else
-			format->str = uint2str(format->length, format->variable, 0);*/	
+			format->str = uint2str(format->length, format->variable, 0);
 		break;
 	case 'o':
 		format->str = int2octal(format->length, format->variable);
@@ -92,24 +92,24 @@ char *handle_variable(struct Format_str *format)
 		format->str = int2hex(format->length, format->variable);
 		str = capitalize(format->variable);
 		break;
-	/*case 'b':
-		str = int2bin(*((unsigned int*)f_str->variable));
+	case 'b':
+		str = uint2bin(*((unsigned int*)format->variable));
 		break;
-	case 'S':
-		str = custom_specifier_S(f_str->variable);
-		break;
-	case 'r':
-		str = reverse(f_str->variable);
+	/*case 'S':
+		str = custom_specifier_S(format->variable);
 		break;*/
+	case 'r':
+		str = reverse(format->variable);
+		break;
 	case 's':
 		format->str = sub_string(format->variable, strlen(format->variable));
 		break;
 	case 'p':
 		format->str = ptr2str(format->variable);
-		break;/*
+		break;
 	case 'R':
-		str = rot13(f_str->variable);
-		break;*/
+		str = rot13(format->variable);
+		break;
 	}
 	return (format->str);
 }
