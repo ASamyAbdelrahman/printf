@@ -20,6 +20,14 @@ char *int2octal(char length, void const * const ptr)
 		n = *((short int *)ptr);
 	else if (length == '\0')
 		n = *((int *)ptr);
+	if (n == 0)
+	{
+		str = (char *)malloc(sizeof(char) * 2);
+		octal[0] = '0';
+		str[0] = octal[0];
+		str[1] = '\0';
+		return (str);
+	}
 	while (n > 0)
 	{
 		octal[i] = n % 8;
