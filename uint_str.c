@@ -47,3 +47,4 @@ char *uint2str(char length, void const * const ptr, char put_positive_sign)
 	reverse(str);
 	return (str);
 }
+

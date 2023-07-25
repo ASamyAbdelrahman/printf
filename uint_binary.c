@@ -7,7 +7,7 @@
  */
 char *uint2bin(unsigned int n)
 {
-	unsigned int binary[32];
+	unsigned int binary[64];
 	int i, j, k;
 	char *str;
 
@@ -27,3 +27,4 @@ char *uint2bin(unsigned int n)
 	str[k] = '\0';
 	return (str);
 }
+

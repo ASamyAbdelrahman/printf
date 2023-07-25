@@ -19,3 +19,4 @@ char *capitalize(char *str)
 	}
 	return (str);
 }
+
