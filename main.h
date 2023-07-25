@@ -9,6 +9,7 @@ struct Format_str
 {
 	char specifier;
 	char length;
+	char is_number;
 	unsigned int precision;
 	unsigned int width;
 	char *flags;
@@ -33,9 +34,8 @@ char *ptr2str(void const * const ptr);
 int _printf(const char *format, ...);
 
 /*int2str.c -> Samy */
-char *int2str(char length, void const * const ptr); /* length {'\0' , 'l', 'h'} */
-/*char *uint2str(char length, void const * const ptr);*/
-char *uint2str(unsigned int num);
+char *int2str(char length, void const * const ptr, char put_positive_sign); /* length {'\0' , 'l', 'h'} */
+char *uint2str(char length, void const * const ptr, char put_positive_sign);
 int str2int(char *str);
 
 /*format2final_str.c -> Abdullrahmen*/
