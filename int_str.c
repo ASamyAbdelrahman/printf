@@ -26,7 +26,7 @@ bool negative_number(int num)
 char *int2str(char length, void const * const ptr, char put_positive_sign)
 {
 	char *str;
-	signed long int n, rem, num, len, i;
+	signed long int n, rem, num, len, i = 0;
 	bool isNegative = false;
 
 	if (length == 'l')
