@@ -30,8 +30,18 @@ unsigned int str_len(char *str);
 char *capitalize(char *str);
 char *reverse(char *str);
 
+/*utilz.c -> Abdullrahmen*/
+char get_type(struct Format_str *format);
+char get_type2(struct Format_str *format);
+void debug_print_Format(struct Format_str *format);
+unsigned int get_format_len(struct Format_str *format);
+char *ptr2str(void const * const ptr);
+
 /*_printf.c -> Abdullrahmen*/
 char *ptr2str(void const * const ptr);
+void *get_variable(va_list *args, struct Format_str *format);
+void free_Format(struct Format_str *format);
+char *handle_buffer(char *buffer, char const *str, unsigned int str_len_, int *n_char_printed);
 int _printf(const char *format, ...);
 
 /*int2str.c -> Samy */
