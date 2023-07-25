@@ -22,3 +22,4 @@ char *reverse(char *str)
 	}
 	return (str);
 }
+

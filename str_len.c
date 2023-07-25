@@ -18,3 +18,4 @@ unsigned int str_len(char *str)
 	}
 	return (len);
 }
+

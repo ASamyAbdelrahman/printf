@@ -19,3 +19,4 @@ int str2int(char *str)
 	}
 	return (num);
 }
+

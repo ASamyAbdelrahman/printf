@@ -27,3 +27,4 @@ char *uint2bin(unsigned int n)
 	str[k] = '\0';
 	return (str);
 }
+

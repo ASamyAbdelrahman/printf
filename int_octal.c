@@ -43,3 +43,4 @@ char *int2octal(char length, void const * const ptr)
 	str[k] = '\0';
 	return (str);
 }
+

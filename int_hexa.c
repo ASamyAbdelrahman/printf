@@ -46,3 +46,4 @@ char *int2hex(char length, void const * const ptr)
 	str[k] = '\0';
 	return (str);
 }
+

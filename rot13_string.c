@@ -18,9 +18,8 @@ char *rot13(char *str)
 			ptr[i] = str[i] + 13;
 		else if (str[i] >= 'a' && str[i] <= 'z')
 			ptr[i] = str[i] + 13;
-		else if (str[i] >= '0' && str[i] <= '9')
-			ptr[i] = str[i] + 5;
 	}
 	ptr[i] = '\0';
 	return (ptr);
 }
+
