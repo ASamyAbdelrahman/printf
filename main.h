@@ -41,8 +41,9 @@ char *ptr2str(void const * const ptr);
 char *ptr2str(void const * const ptr);
 void *get_variable(va_list *args, struct Format_str *format);
 void free_Format(struct Format_str *format);
-char *handle_buffer(char *buffer, char const *str, unsigned int str_len_, int *n_char_printed);
 int _printf(const char *format, ...);
+char __printf__(const char *format, int *n_printed, int *i, va_list *args,
+		char *buffer, struct Format_str *f_str);
 
 /*int2str.c -> Samy */
 char *int2str(char length, void const * const ptr, char put_positive_sign); /* length {'\0' , 'l', 'h'} */
@@ -51,10 +52,14 @@ int str2int(char *str);
 
 /*format2final_str.c -> Abdullrahmen*/
 char *get_final_str(struct Format_str *format);
+char *handle_variable2(struct Format_str *format, char *str, unsigned int len);
 char *handle_variable(struct Format_str *format);
 char *handle_precision(struct Format_str *format);
+char *handle_buffer(char *buffer, char const *str, unsigned int str_len_, int *n_char_printed);
+
+/*handle_width.c -> Abdullrahmen*/
 char *handle_width(struct Format_str *format);
-char *handle_flags(struct Format_str *format);
+char *handle_width2(struct Format_str *format, char *str, unsigned int i, unsigned int len);
 
 /*numerical_conversions.c -> Samy -> all strings are in the heap (don't forget to free)*/
 char *uint2bin(unsigned int n);
