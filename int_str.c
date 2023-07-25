@@ -2,6 +2,22 @@
 #include <stdlib.h>
 #include <stdbool.h>
 /**
+ * negative_number - checks if the number negative or not
+ * @num: the required number
+ * Return: 1 if the number is negative
+ */
+bool negative_number(int num)
+{
+	bool isNegative = false;
+
+	if (num < 0)
+	{
+		isNegative = true;
+	}
+	return (isNegative);
+}
+
+/**
  * int2str - converts signed int to string
  * @length: the required data type
  * @ptr: the required number
@@ -12,7 +28,6 @@ char *int2str(char length, void const * const ptr, char put_positive_sign)
 {
 	char *str;
 	signed long int n, rem, num, len, i;
-	bool isNegative = false;
 
 	if (length == 'l')
 		num = *((signed long int *)ptr);
@@ -35,11 +50,9 @@ char *int2str(char length, void const * const ptr, char put_positive_sign)
 		n /= 10;
 	}
 	str = (char *)malloc(sizeof(char) * (len + 2));
-	if (num < 0)
-	{
-		isNegative = true;
+	isNegative = negative_number(num);
+	if (isNegative)
 		num = -num;
-	}
 	while (num != 0)
 	{
 		rem = num % 10;
