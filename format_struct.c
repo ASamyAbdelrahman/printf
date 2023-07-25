@@ -11,10 +11,11 @@
 int is_in_str(char value, char *str)
 {
 	int i = 0;
-
-	while (str[i])
-		if (str[i++] == value)
-			return (1);
+	
+	if (str)
+		while (str[i])
+			if (str[i++] == value)
+				return (1);
 	return (0);
 }
 
@@ -35,9 +36,9 @@ char *_strncpy(char *dest, char const *src, int n)
 		dest[i] = src[i];
 		++i;
 	}
+	
 	while (i < n)
 		dest[i++] = '\0';
-
 	return (dest);
 }
 

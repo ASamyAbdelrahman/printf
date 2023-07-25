@@ -32,11 +32,13 @@ char *ptr2str(void const * const ptr)
 * 9 : char
 * 0 : unknown
 */
-char get_type(struct Format_str *f_str)
+char get_type(struct Format_str *format)
 {
-	switch (f_str->specifier)
+	format->is_number = 0;
+	switch (format->specifier)
 	{
 	case 'b':
+		format->is_number = 1;
 		return (4);
 	case 'S':
 		return (8);
@@ -52,11 +54,12 @@ char get_type(struct Format_str *f_str)
 		return (7);
 	case 'i':
 	case 'd':
-		if (!f_str->length)
+		format->is_number = 1;
+		if (!format->length)
 			return (1);
-		else if (f_str->length == 'h')
+		else if (format->length == 'h')
 			return (2);
-		else if (f_str->length == 'l')
+		else if (format->length == 'l')
 			return (3);
 		else
 			return (0);
@@ -64,11 +67,12 @@ char get_type(struct Format_str *f_str)
 	case 'o':
 	case 'x':
 	case 'X':
-		if (!f_str->length)
+		format->is_number = 1;
+		if (!format->length)
 			return (4);
-		else if (f_str->length == 'h')
+		else if (format->length == 'h')
 			return (5);
-		else if (f_str->length == 'l')
+		else if (format->length == 'l')
 			return (6);
 		else
 			return (0);
@@ -196,8 +200,8 @@ int _printf(const char *format, ...)
 			}
 			f_str = str2format(&format[i]);
 
-			debug_print_Format(f_str);
-			printf("type : %i\n", get_type(f_str));
+			/*debug_print_Format(f_str);
+			printf("type : %i\n", get_type(f_str));*/
 
 			f_str->variable = get_variable(&args, f_str);
 			if (!f_str->variable)
@@ -228,11 +232,28 @@ int _printf(const char *format, ...)
 int main(void)
 {
 	int i = 555;
-	char str[] = "Hello world";
+	char str[] = "Hello";
 
-	/*printf("%hu", (unsigned long) i);*/
-	_printf("%10.17o", i);
-	printf("'%10.17o'", i);
+/*	printf("$$%s$$", int2octal(0, &i));*/
+/*	printf("%hu", (unsigned long) i);*/
+	_printf("%28s", str);
+	printf("'%28s'", str);
+
+	_printf("%-#15.9lX", i);
+	printf("'%-#15.9lX'", i);
+
+	_printf("% #5.10hX", i);
+	printf("'% #5.10hX'", i);
+
+	_printf("%+- #015.5X", i);
+	printf("'%+- #015.5X'", i);
+
+	_printf("%#X", i);
+	printf("'%#X'", i);  
+
+	_printf("%#X", 0);
+	printf("'%#X'", 0);
+
 	/*_printf("%b", i);
 	_printf("Hello there >%+-+  23.55lX<", i);
 	_printf("% kd125");*/

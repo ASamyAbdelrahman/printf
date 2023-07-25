@@ -35,7 +35,8 @@ int _printf(const char *format, ...);
 
 /*int2str.c -> Samy */
 char *int2str(char length, void const * const ptr, char put_positive_sign); /* length {'\0' , 'l', 'h'} */
-char *uint2str(char length, void const * const ptr, char put_positive_sign);
+/*char *uint2str(char length, void const * const ptr, char put_positive_sign);*/
+char *uint2str(unsigned int num);
 int str2int(char *str);
 
 /*format2final_str.c -> Abdullrahmen*/
