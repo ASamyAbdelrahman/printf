@@ -1,7 +1,7 @@
-#include <stdio.h>
 #include <unistd.h>
 #include "main.h"
 #include "string.h"
+#include <stdio.h>
 
 char *get_final_str(struct Format_str *format)
 {
@@ -15,12 +15,11 @@ char *get_final_str(struct Format_str *format)
 	if (*format->str == '0')
 		is_zero = 1;
 	format->str = handle_precision(format);
-	
 	if (is_in_str('#', format->flags) && (format->specifier == 'x' || /* # flag */
 						format->specifier == 'X' ||
 						format->specifier == 'o') && !is_zero)
 	{
-		len = strlen(format->str);
+		len = str_len(format->str);
 		if (format->specifier == 'o')
 			str = malloc(len + 2);
 		else
@@ -90,25 +89,25 @@ char *handle_variable(struct Format_str *format)
 		break;
 	case 'X':
 		format->str = int2hex(format->length, format->variable);
-		str = capitalize(format->variable);
+		format->str = capitalize(format->str);
 		break;
 	case 'b':
-		str = uint2bin(*((unsigned int*)format->variable));
+		format->str = uint2bin(*((unsigned int*)format->variable));
 		break;
 	/*case 'S':
-		str = custom_specifier_S(format->variable);
+		format->str = custom_specifier_S(format->variable);
 		break;*/
 	case 'r':
-		str = reverse(format->variable);
+		format->str = reverse(format->variable);
 		break;
 	case 's':
-		format->str = sub_string(format->variable, strlen(format->variable));
+		format->str = sub_string(format->variable, str_len(format->variable));
 		break;
 	case 'p':
 		format->str = ptr2str(format->variable);
 		break;
 	case 'R':
-		str = rot13(format->variable);
+		format->str = rot13(format->variable);
 		break;
 	}
 	return (format->str);
@@ -146,9 +145,9 @@ char *handle_width(struct Format_str *format)
 	if (!format->width && !format->flags)
 		return (format->str);
 
-	len = strlen(format->str);
+	len = str_len(format->str);
 
-	if ((is_in_str(' ', format->flags) || is_in_str('+', format->flags)) && 
+	if ((is_in_str(' ', format->flags) || is_in_str('+', format->flags)) && format->is_number &&
 		format->specifier != 'x' && format->specifier != 'X' && format->specifier != 'o')
 	{
 		str = malloc(len + 2);
@@ -160,14 +159,16 @@ char *handle_width(struct Format_str *format)
 		format->str = str;
 	}	
 
-	len = strlen(format->str);
 	if (format->width <= len)
 		return (format->str);
 
 	str = malloc(format->width + 1);
 	if (!str)
+	{
+		free(format->str);
+		format->str = 0;
 		return (0);
-	str[format->width] = '\0';
+	}
 	if (is_in_str('-', format->flags))
 		if(is_in_str('0', format->flags) && format->is_number &&
 		format->specifier != 'x' && format->specifier != 'X' && format->specifier != 'o')
@@ -184,13 +185,13 @@ char *handle_width(struct Format_str *format)
 		else
 			for (i = 0; i < format->width - len; ++i)
 				str[i] = ' ';
-
 	if (is_in_str('-', format->flags))
 		_strncpy(str, format->str, len);
 	else
 		_strncpy(&str[i], format->str, len);
+	str[format->width] = '\0';
 	free(format->str);
 	format->str = str;
-	return (format->str);	
+	return (format->str);
 }
 

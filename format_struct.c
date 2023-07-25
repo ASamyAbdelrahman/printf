@@ -52,7 +52,6 @@ char *_strncpy(char *dest, char const *src, int n)
 char *sub_string(char const *str, unsigned int n)
 {
 	char *sub;
-
 	if (!str)
 		return (0);
 	sub = malloc(n + 1);
