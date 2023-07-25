@@ -15,11 +15,11 @@ char *int2octal(char length, void const * const ptr)
 
 	i = 0;
 	if (length == 'l')
-		n = *((long int *)ptr);
+		n = *((unsigned long int *)ptr);
 	else if (length == 'h')
-		n = *((short int *)ptr);
+		n = *((unsigned short int *)ptr);
 	else if (length == '\0')
-		n = *((int *)ptr);
+		n = *((unsigned int *)ptr);
 	if (n == 0)
 	{
 		str = (char *)malloc(sizeof(char) * 2);
