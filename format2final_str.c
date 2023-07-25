@@ -69,9 +69,6 @@ char *handle_variable2(struct Format_str *format, char *str, unsigned int len)
 	case 'b':
 		format->str = uint2bin(*((unsigned int *)format->variable));
 		break;
-	/*case 'S':
-		format->str = custom_specifier_S(format->variable);
-		break;*/
 	case 'r':
 		format->str = reverse(format->variable);
 		break;
