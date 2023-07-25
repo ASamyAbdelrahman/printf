@@ -1,7 +1,6 @@
 #include <unistd.h>
 #include "main.h"
-
-#define MAX_BUFFER_SIZE 10
+#define MAX_BUFFER_SIZE 1024
 
 /**
 * ptr2str - Convert a void pointer to string
@@ -82,44 +81,39 @@ void free_Format(struct Format_str *format)
 	}
 	free(format->str);
 }
-
 /**
-* handle_buffer - Add a string to the buffer and when the buffer is full write
-* it to standard output and fill it again with remaining string
-* and repeat this process ntill the string is ended.
-* @buffer : The buffer
-* @str : String to add to the buffer
-* @str_len_ : the length of str
-* @n_char_printed : will increased by the number of characters printed
-* Return: The new buffer
+* __printf__ - Write variable to stdout, the standard output stream
+* @format : Is a character string.
+* The format string is composed of zero or more directives
+* @n_printed: number of characters printed
+* @i: iterator
+* @args: args
+* @buffer: buffer
+* @f_str: format struct pointer
+* Return: if need continue 0 else 1
 */
-char *handle_buffer(char *buffer, char const *str, unsigned int str_len_,
-						int *n_char_printed)
+char __printf__(const char *format, int *n_printed, int *i, va_list *args,
+		char *buffer, struct Format_str *f_str)
 {
-	unsigned int len = 0, i = 0;
-
-	len = str_len(buffer);
-	while (i < str_len_)
+	if (format[*i + 1] == '%')
 	{
-		while (i < str_len_ && len < MAX_BUFFER_SIZE)
-		{
-			buffer[len] = str[i];
-			++i;
-			++len;
-		}
-		if (len == MAX_BUFFER_SIZE)
-		{
-			write(1, buffer, len);
-			*n_char_printed += len;
-			buffer[0] = '\0';
-			len = 0;
-		}
-		else
-		{
-			buffer[len] = '\0';
-		}
+		buffer = handle_buffer(buffer, "%", 1, n_printed);
+		(*i) += 2;
+		return (0);
 	}
-	return (buffer);
+	f_str = str2format(&format[*i]);
+	f_str->variable = get_variable(args, f_str);
+	if (!f_str->variable)
+	{
+		buffer = handle_buffer(buffer, "%", 1, n_printed);
+		++(*i);
+		return (0);
+	}
+	f_str->str = get_final_str(f_str);
+	buffer = handle_buffer(buffer, f_str->str, str_len(f_str->str), n_printed);
+	(*i) += get_format_len(f_str) + 1;
+	free_Format(f_str);
+	return (1);
 }
 
 /**
@@ -132,8 +126,8 @@ int _printf(const char *format, ...)
 {
 	int n_printed = 0, i = 0;
 	va_list args;
-	char *buffer;
-	struct Format_str *f_str;
+	char *buffer = 0;
+	struct Format_str *f_str = 0;
 
 	if (!format)
 		write(1, "NULL", 4);
@@ -145,30 +139,15 @@ int _printf(const char *format, ...)
 	while (format[i])
 		if (format[i] == '%')
 		{
-			if (format[i + 1] == '%')
-			{
-				buffer = handle_buffer(buffer, "%", 1, &n_printed);
-				i += 2;
+			if (!__printf__(format, &n_printed, &i, &args, buffer, f_str))
 				continue;
-			}
-			f_str = str2format(&format[i]);
-			f_str->variable = get_variable(&args, f_str);
-			if (!f_str->variable)
-			{
-				buffer = handle_buffer(buffer, "%", 1, &n_printed);
-				++i;
-				continue;
-			}
-			f_str->str = get_final_str(f_str);
-			buffer = handle_buffer(buffer, f_str->str, str_len(f_str->str), &n_printed);
-			i += get_format_len(f_str) + 1;
-			free_Format(f_str);
 		}
 		else
 			buffer = handle_buffer(buffer, &format[i++], 1, &n_printed);
 	write(1, buffer, str_len(buffer));
 	n_printed += str_len(buffer);
 	free(buffer);
+	va_end(args);
 	return (n_printed);
 }
 
