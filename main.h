@@ -12,6 +12,7 @@ struct Format_str
 	char is_number;
 	unsigned int precision;
 	unsigned int width;
+	unsigned int len;
 	char *flags;
 	char *str; /*final string*/
 	void *variable;
@@ -22,7 +23,7 @@ unsigned int handles(struct Format_str *format,
 				unsigned int j);
 char *sub_string(char const *str, unsigned int n);
 char *_strncpy(char *dest, char const *src, int n);
-int is_in_str(char value, char *str);
+char is_in_str(char value, char *str);
 
 /*_putchar.c -> Samy*/
 unsigned int str_len(char *str);
@@ -35,8 +36,7 @@ int _printf(const char *format, ...);
 
 /*int2str.c -> Samy */
 char *int2str(char length, void const * const ptr, char put_positive_sign); /* length {'\0' , 'l', 'h'} */
-/*char *uint2str(char length, void const * const ptr, char put_positive_sign);*/
-char *uint2str(unsigned int num);
+char *uint2str(char length, void const * const ptr, char put_positive_sign);
 int str2int(char *str);
 
 /*format2final_str.c -> Abdullrahmen*/

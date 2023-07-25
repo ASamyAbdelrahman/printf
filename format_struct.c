@@ -8,7 +8,7 @@
 * @str : the string
 * Return: if found 1 else 0
 */
-int is_in_str(char value, char *str)
+char is_in_str(char value, char *str)
 {
 	int i = 0;
 	

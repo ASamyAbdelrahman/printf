@@ -1,6 +1,9 @@
+#include <string.h>
 #include <stdio.h> /* till print_string function completed */
 #include <unistd.h>
 #include "main.h"
+
+#define MAX_BUFFER_SIZE 10
 
 /*
 * ptr2str - Convert a void pointer to string
@@ -85,27 +88,48 @@ char get_type(struct Format_str *format)
 * debug_print_Format - print all the members of Format_str struct
 * @f_str: Format_str struct pointer
 */
-void debug_print_Format(struct Format_str *f_str)
+void debug_print_Format(struct Format_str *format)
 {
-	printf("\nspecifier : '%c'", f_str->specifier);
-	printf("\nlength : '%c'", f_str->length);
-	printf("\nprecision : '%u'", f_str->precision);
-	printf("\nwidth : '%u'", f_str->width);
-	printf("\nflags : '%s'\n", f_str->flags); 
+	printf("\nspecifier : '%c'", format->specifier);
+	printf("\nlength : '%c'", format->length);
+	printf("\nprecision : '%u'", format->precision);
+	printf("\nwidth : '%u'", format->width);
+	printf("\nflags : '%s'\n", format->flags); 
 }
 
-/**
-* handle_buffer - Add a string to the buffer and when the buffer is full write
-* it to standard output and fill it again with remaining string and repeat this 
-* process till the string is ended.
-* @buffer : The buffer
-* @str : String to add to the buffer
-* @n_char_printed : will increased by the number of characters printed
-* Return: The new buffer
-*/
-char *handle_buffer(char *buffer, char *str, unsigned int str_len, int *n_char_printed)
+unsigned int get_format_len(struct Format_str *format)
 {
-	
+	unsigned int len = 0, i = 0, j = 0;
+
+	if (format->flags)
+		len += str_len(format->flags);
+	if (format->width)
+	{
+		j = format->width;
+		i = 0;
+		while (j)
+		{
+			++i;
+			j /= 10;
+		}
+		len += i; 
+	}
+	if (format->precision)
+	{
+		j = format->precision;
+		i = 0;
+		while (j)
+		{
+			++i;
+			j /= 10;
+		}
+		len += i + 1;
+	}
+	if (format->length)
+		++len;
+	if (format->specifier)
+		++len;
+	return (len);
 }
 
 void *get_variable(va_list *args, struct Format_str *f_str)
@@ -170,6 +194,43 @@ void free_Format(struct Format_str *format)
 }
 
 /**
+* handle_buffer - Add a string to the buffer and when the buffer is full write
+* it to standard output and fill it again with remaining string and repeat this 
+* process till the string is ended.
+* @buffer : The buffer
+* @str : String to add to the buffer
+* @n_char_printed : will increased by the number of characters printed
+* Return: The new buffer
+*/
+char *handle_buffer(char *buffer, char const *str, unsigned int str_len, int *n_char_printed)
+{
+	unsigned int len = 0, i = 0;
+
+	len = strlen(buffer);
+	while (i < str_len)
+	{
+		while (i < str_len && len < 1024)
+		{
+			buffer[len] = str[i];
+			++i;
+			++len;
+		}
+		if (len == MAX_BUFFER_SIZE)
+		{
+			write (1, buffer, len);
+			n_char_printed += len;
+			buffer[0] = '\0';
+			len = 0;
+		}
+		else
+		{
+			buffer[len] = '\0';
+		}
+	}
+	return (buffer);
+}
+
+/**
 * _printf - Write output to stdout, the standard output stream
 * @foramt : Is a character string. The format string is composed of zero or more directives
 * Return : The number of characters printed (excluding the null byte)
@@ -184,7 +245,7 @@ int _printf(const char *format, ...)
 
 
 	va_start(args, format);
-	buffer = malloc(1024);
+	buffer = malloc(MAX_BUFFER_SIZE);
 	if (!buffer)
 		return (-1);
 	while(format[i])
@@ -193,8 +254,7 @@ int _printf(const char *format, ...)
 		{
 			if (format[i + 1] == '%')
 			{
-				/*buffer = handle_buffer(buffer, "%", 1, &n_chars_printed);*/
-				write(1, "%", 1);
+				buffer = handle_buffer(buffer, "%", 1, &n_chars_printed);
 				i += 2;
 				continue;
 			}
@@ -206,20 +266,24 @@ int _printf(const char *format, ...)
 			f_str->variable = get_variable(&args, f_str);
 			if (!f_str->variable)
 			{
-				write(1, "%", 1);
+				buffer = handle_buffer(buffer, "%", 1, &n_chars_printed);
 				++i;
 				continue;
 			}
 			f_str->str = get_final_str(f_str);
-			printf("\n'%s'\n", f_str->str);
-			/*buffer = handle_buffer(buffer, str, str_len(str), &n_chars_printed);*/ 
+			buffer = handle_buffer(buffer, f_str->str, str_len(f_str->str), &n_chars_printed);
+			i += get_format_len(f_str) + 1;
 			free_Format(f_str);
 		}
-		/*printf("%c", format[i]);*/
-/*		write(1, &forzmat[i], 1);*/
-		++i;
+		else
+		{
+			buffer = handle_buffer(buffer, &format[i], 1, &n_chars_printed);
+			++i;
+		}
 	}
-
+	write(1, buffer, strlen(buffer));
+	n_chars_printed += strlen(buffer);
+	free(buffer);
 	va_end(args);
 	return (n_chars_printed);
 }
@@ -234,25 +298,28 @@ int main(void)
 	int i = 555;
 	char str[] = "Hello";
 
+	_printf("123456789123456789\n");
+	printf("123456789123456789\n");
+
 /*	printf("$$%s$$", int2octal(0, &i));*/
 /*	printf("%hu", (unsigned long) i);*/
-	_printf("%28s", str);
-	printf("'%28s'", str);
+	_printf("'%28s'\n", str);
+	printf("'%28s'\n", str);
 
-	_printf("%-#15.9lX", i);
-	printf("'%-#15.9lX'", i);
+	_printf("'%-#15.9lX'\n", i);
+	printf("'%-#15.9lX'\n", i);
 
-	_printf("% #5.10hX", i);
-	printf("'% #5.10hX'", i);
+	_printf("'% +#5.10hX'\n", i);
+	printf("'% #5.10hX'\n", i);
 
-	_printf("%+- #015.5X", i);
-	printf("'%+- #015.5X'", i);
+	_printf("'%+- #015.5X'\n", i);
+	printf("'%+- #015.5X'\n", i);
 
-	_printf("%#X", i);
-	printf("'%#X'", i);  
+	_printf("'%#X'\n", i);
+	printf("'%#X'\n", i);  
 
-	_printf("%#X", 0);
-	printf("'%#X'", 0);
+	_printf("'%#X'\n", 0);
+	printf("'%#X'\n", 0);
 
 	/*_printf("%b", i);
 	_printf("Hello there >%+-+  23.55lX<", i);
