@@ -1,5 +1,6 @@
 #include "main.h"
 #include <stdlib.h>
+#include <stdbool.h>
 /**
  * int2str - converts signed int to string
  * @length: the required data type
@@ -10,8 +11,8 @@
 char *int2str(char length, void const * const ptr, char put_positive_sign)
 {
 	char *str;
-	signed long int n, rem, num;
-	int len, i;
+	signed long int n, rem, num, len, i;
+	bool isNegative = false;
 
 	if (length == 'l')
 		num = *((signed long int *)ptr);
@@ -34,16 +35,21 @@ char *int2str(char length, void const * const ptr, char put_positive_sign)
 		n /= 10;
 	}
 	str = (char *)malloc(sizeof(char) * (len + 2));
+	if (num < 0)
+	{
+		isNegative = true;
+		num = -num;
+	}
 	while (num != 0)
 	{
 		rem = num % 10;
 		str[i++] = (rem > 9) ? (rem - 10) + 'a' : rem + '0';
 		num = num / 10;
 	}
+	if (isNegative)
+		str[i++] = '-';
 	if (put_positive_sign == '1')
 		str[i++] = '+';
-	else
-		str[i++] = '-';
 	str[i] = '\0';
 	reverse(str);
 	return (str);
