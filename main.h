@@ -26,7 +26,7 @@ char *_strncpy(char *dest, char const *src, int n);
 char is_in_str(char value, char *str);
 
 /*_putchar.c -> Samy*/
-unsigned int str_len(char *str);
+unsigned int str_len(char const *str);
 char *capitalize(char *str);
 char *reverse(char *str);
 

@@ -6,7 +6,7 @@
  *
  * Return: on success len
  */
-unsigned int str_len(char *str)
+unsigned int str_len(char const *str)
 {
 	unsigned int len;
 

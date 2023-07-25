@@ -105,6 +105,9 @@ char __printf__(const char *format, int *n_printed, int *i, va_list *args,
 	f_str->variable = get_variable(args, f_str);
 	if (!f_str->variable)
 	{
+		if (str_len(format) == 2)
+			return (2);
+
 		buffer = handle_buffer(buffer, "%", 1, n_printed);
 		++(*i);
 		return (0);
@@ -126,7 +129,7 @@ int _printf(const char *format, ...)
 {
 	int n_printed = 0, i = 0;
 	va_list args;
-	char *buffer = 0;
+	char *buffer = 0, j = 0;
 	struct Format_str *f_str = 0;
 
 	if (!format)
@@ -139,8 +142,11 @@ int _printf(const char *format, ...)
 	while (format[i])
 		if (format[i] == '%')
 		{
-			if (!__printf__(format, &n_printed, &i, &args, buffer, f_str))
+			j = __printf__(format, &n_printed, &i, &args, buffer, f_str);
+			if (!j)
 				continue;
+			else if (j == 2)
+				return (-1);
 		}
 		else
 			buffer = handle_buffer(buffer, &format[i++], 1, &n_printed);
