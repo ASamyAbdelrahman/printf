@@ -7,19 +7,20 @@
  */
 char *rot13(char *str)
 {
+	char *ptr;
 	unsigned int len, i;
 
 	len = str_len(str);
-	str = (char *)malloc(sizeof(char) * (len + 1));
+	ptr = (char *)malloc(sizeof(char) * (len + 1));
 	for (i = 0; i < len; i++)
 	{
 		if (str[i] >= 'A' && str[i] <= 'Z')
-			str[i] = str[i] + 13;
+			ptr[i] = str[i] + 13;
 		else if (str[i] >= 'a' && str[i] <= 'z')
-			str[i] = str[i] + 13;
+			ptr[i] = str[i] + 13;
 		else if (str[i] >= '0' && str[i] <= '9')
-			str[i] = str[i] + 5;
+			ptr[i] = str[i] + 5;
 	}
-	str[i] = '\0';
-	return (str);
+	ptr[i] = '\0';
+	return (ptr);
 }
