@@ -105,6 +105,12 @@ char __printf__(const char *format, int *n_printed, int *i, va_list *args,
 	f_str->variable = get_variable(args, f_str);
 	if (!f_str->variable)
 	{
+		if (f_str->specifier == 's' && f_str->precision <= 6)
+		{
+			handle_buffer(buffer, "(null)", 6, n_printed);
+			(*i) += 2;
+			return (1);
+		}
 		if (str_len(format) == 2 && format[*i + 1] == ' ')
 			return (2);
 
@@ -143,9 +149,7 @@ int _printf(const char *format, ...)
 		if (format[i] == '%')
 		{
 			if (format[i + 1] == ' ' && str_len(format) == 2)
-			{
 				return (-1);
-			}
 			else if (str_len(format) == 1)
 				return (-1);
 			j = __printf__(format, &n_printed, &i, &args, buffer, f_str);
