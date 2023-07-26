@@ -157,7 +157,9 @@ int _printf(const char *format, ...)
 	while (format[i])
 		if (format[i] == '%')
 		{
-			if (format[i + 1] == ' ' && str_len(format) == 2)
+			if (format[i + 1] == '\0')
+				return (-1);
+			if (format[i + 1] == ' ')
 				return (-1);
 			else if (str_len(format) == 1)
 				return (-1);
