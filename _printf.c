@@ -108,9 +108,9 @@ char __printf__(const char *format, int *n_printed, int *i, va_list *args,
 		if (str_len(format) == 2)
 			return (2);
 
-		/*buffer = handle_buffer(buffer, "%", 1, n_printed);*/
+		buffer = handle_buffer(buffer, "%", 1, n_printed);
 		++(*i);
-		return (0);
+		return (2);
 	}
 	f_str->str = get_final_str(f_str);
 	buffer = handle_buffer(buffer, f_str->str, str_len(f_str->str), n_printed);
