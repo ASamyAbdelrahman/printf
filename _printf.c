@@ -111,6 +111,12 @@ char __printf__(const char *format, int *n_printed, int *i, va_list *args,
 			(*i) += 2;
 			return (1);
 		}
+		if (f_str->specifier == 'p')
+		{
+			handle_buffer(buffer, "(nil)", 5, n_printed);
+			(*i) += 2;
+			return (1);
+		}
 		if (str_len(format) == 2 && format[*i + 1] == ' ')
 			return (2);
 
