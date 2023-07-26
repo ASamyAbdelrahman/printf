@@ -142,6 +142,11 @@ int _printf(const char *format, ...)
 	while (format[i])
 		if (format[i] == '%')
 		{
+			if (format[i + 1] == ' ' && str_len(format) == 2)
+			{
+				write(1, "%", 1);
+				return (1);
+			}
 			j = __printf__(format, &n_printed, &i, &args, buffer, f_str);
 			if (!j)
 				continue;
