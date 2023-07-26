@@ -11,6 +11,13 @@ char *uint2bin(unsigned int n)
 	int i, j, k;
 	char *str;
 
+	if (n == 0)
+	{
+		str = malloc(2);
+		str[0] = '0';
+		str[1] = '\0';
+		return (str);
+	}
 	i = 0;
 	while (n > 0)
 	{
