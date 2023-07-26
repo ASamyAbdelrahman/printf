@@ -158,7 +158,11 @@ int _printf(const char *format, ...)
 		if (format[i] == '%')
 		{
 			if (format[i + 1] == '\0')
+			{
+				write(1, buffer, str_len(buffer));
 				return (-1);
+				free(buffer);
+			}
 			if (format[i + 1] == ' ')
 				return (-1);
 			else if (str_len(format) == 1)
