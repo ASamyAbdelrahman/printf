@@ -110,7 +110,7 @@ char __printf__(const char *format, int *n_printed, int *i, va_list *args,
 
 		buffer = handle_buffer(buffer, "%", 1, n_printed);
 		++(*i);
-		return (2);
+		return (0);
 	}
 	f_str->str = get_final_str(f_str);
 	buffer = handle_buffer(buffer, f_str->str, str_len(f_str->str), n_printed);
