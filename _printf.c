@@ -105,7 +105,7 @@ char __printf__(const char *format, int *n_printed, int *i, va_list *args,
 	f_str->variable = get_variable(args, f_str);
 	if (!f_str->variable)
 	{
-		if (str_len(format) == 2)
+		if (str_len(format) == 2 && format[*i + 1] == ' ')
 			return (2);
 
 		buffer = handle_buffer(buffer, "%", 1, n_printed);
