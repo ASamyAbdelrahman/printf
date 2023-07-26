@@ -157,14 +157,12 @@ int _printf(const char *format, ...)
 	while (format[i])
 		if (format[i] == '%')
 		{
-			if (format[i + 1] == '\0')
+			if (format[i + 1] == '\0' || format[i + 1] == ' ')
 			{
 				write(1, buffer, str_len(buffer));
 				return (-1);
 				free(buffer);
 			}
-			if (format[i + 1] == ' ')
-				return (-1);
 			else if (str_len(format) == 1)
 				return (-1);
 			j = __printf__(format, &n_printed, &i, &args, buffer, f_str);
