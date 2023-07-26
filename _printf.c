@@ -118,6 +118,9 @@ char __printf__(const char *format, int *n_printed, int *i, va_list *args,
 		++(*i);
 		return (0);
 	}
+	if (f_str->specifier == 'c')
+		if (*(char *)f_str->variable == '\0')
+			++(*n_printed);
 	f_str->str = get_final_str(f_str);
 	buffer = handle_buffer(buffer, f_str->str, str_len(f_str->str), n_printed);
 	(*i) += get_format_len(f_str) + 1;
