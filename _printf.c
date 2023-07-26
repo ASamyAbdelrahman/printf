@@ -133,7 +133,7 @@ int _printf(const char *format, ...)
 	struct Format_str *f_str = 0;
 
 	if (!format)
-		write(1, "NULL", 4);
+		return (-1);
 	va_start(args, format);
 	buffer = malloc(MAX_BUFFER_SIZE);
 	if (!buffer)
@@ -144,9 +144,10 @@ int _printf(const char *format, ...)
 		{
 			if (format[i + 1] == ' ' && str_len(format) == 2)
 			{
-				write(1, "%", 1);
-				return (1);
+				return (-1);
 			}
+			else if (str_len(format) == 1)
+				return (-1);
 			j = __printf__(format, &n_printed, &i, &args, buffer, f_str);
 			if (!j)
 				continue;
