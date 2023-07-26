@@ -142,7 +142,7 @@ char __printf__(const char *format, int *n_printed, int *i, va_list *args,
 */
 int _printf(const char *format, ...)
 {
-	int n_printed = 0, i = 0;
+	int n_printed = 0, i = 0, counter = 0;
 	va_list args;
 	char *buffer = 0, j = 0;
 	struct Format_str *f_str = 0;
@@ -157,14 +157,24 @@ int _printf(const char *format, ...)
 	while (format[i])
 		if (format[i] == '%')
 		{
-			if (format[i + 1] == '\0' || format[i + 1] == ' ')
+			if (format[i + 1] == ' ' && !counter)
 			{
+				counter = i + 1;
+				while (format[counter])
+					if (format[counter++] == '%')
+					{
+						i = counter;
+						buffer = handle_buffer(buffer,
+							 "%", 1, &n_printed);
+						counter = 0;
+						break;
+					}
+				if (!counter)
+					continue;
 				write(1, buffer, str_len(buffer));
 				return (-1);
 				free(buffer);
 			}
-			else if (str_len(format) == 1)
-				return (-1);
 			j = __printf__(format, &n_printed, &i, &args, buffer, f_str);
 			if (!j)
 				continue;
